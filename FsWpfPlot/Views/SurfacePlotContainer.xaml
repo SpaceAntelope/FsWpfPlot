@@ -1,0 +1,13 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="MainWindow" Height="350" Width="525">
+  <StackPanel>
+    <TextBlock>Hello World!</TextBlock>
+      
+        <TextBlock Text="{Binding MinY}"></TextBlock>
+        <TextBlock Text="{Binding MinX}"></TextBlock>
+        <TextBlock Text="{Binding MaxY}"></TextBlock>
+        <TextBlock Text="{Binding MaxX}"></TextBlock>
+    </StackPanel>
+</Window>
