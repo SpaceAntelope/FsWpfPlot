@@ -10,11 +10,10 @@ module Views =
     open Classes
 
     type SurfacePlotContainerProxy(model: SurfacePlotModel ) = 
-        inherit XamlProxyBase("/FsWpfPlot;component/Views/SurfacePlotContainer.xaml")
+        inherit XamlProxyBase("/FsWpfPlot;component/Views/SurfacePlotContainer.xaml", model)
         let miExit : MenuItem = base.Window?miExit
         do 
             let win = base.Window
             miExit.Click.Add(fun _ -> win.Close())
-            base.Window.DataContext <- model
 
         member this.Show() = Application().Run(this.Window)
