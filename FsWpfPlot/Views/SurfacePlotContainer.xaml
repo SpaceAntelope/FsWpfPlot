@@ -3,8 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf" 
         xmlns:local="clr-namespace:FsWpfPlot"
+        xmlns:types="clr-namespace:FsWpfPlot.Types;assembly=FsWpfPlot" 
         xmlns:vel="clr-namespace:FsWpfPlot.VisualElements;assembly=FsWpfPlot" 
         Title="Surface plot demo" Height="480" Width="640">
+    <Window.Resources>
+        <types:LightConverter x:Key="dummyConverter"/>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -20,7 +24,7 @@
             </h:HelixViewport3D.Camera>
 
             <!-- Lights -->
-            <ModelVisual3D Content="{Binding Graphics.Lights}"/>
+            <ModelVisual3D Content="{Binding Lights,Converter={StaticResource ResourceKey=dummyConverter}, ConverterParameter='Lights!'}"/>
 
             <!-- The plot visual (surface, axes and labels) -->
             <vel:SurfacePlotAxes3D Points="{Binding Data}" />

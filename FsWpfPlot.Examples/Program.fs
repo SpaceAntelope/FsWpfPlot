@@ -11,7 +11,7 @@ open System.Windows.Media.Media3D
 [<STAThread>]
 let main argv = 
 
-    let model = SurfacePlotModel(MinX = 6., MinY = 8.)
+    let model = SurfacePlotModel()
     model.Data <- model.FuncZ |> model.DataFromFunction
     let plot = FsWpfPlot.Views.SurfacePlotContainerProxy(model)
     printfn "%A" <| plot.Show()
@@ -19,6 +19,5 @@ let main argv =
     printfn "Done."
     
     //Console.ReadLine() |> ignore
-    (Array2D.create<Point3D> 4 4 ).GetType().Name
     0
     
