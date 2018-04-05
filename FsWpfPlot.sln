@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsWpfPlot", "FsWpfPlot\FsWpfPlot.fsproj", "{89192A71-E89B-4976-9DB4-AEB5C181CB63}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsWpfPlot.Examples", "FsWpfPlot.Examples\FsWpfPlot.Examples.fsproj", "{0DAEC2A6-1985-42A3-AE71-B861855FF2F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{89192A71-E89B-4976-9DB4-AEB5C181CB63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89192A71-E89B-4976-9DB4-AEB5C181CB63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89192A71-E89B-4976-9DB4-AEB5C181CB63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DAEC2A6-1985-42A3-AE71-B861855FF2F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DAEC2A6-1985-42A3-AE71-B861855FF2F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DAEC2A6-1985-42A3-AE71-B861855FF2F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DAEC2A6-1985-42A3-AE71-B861855FF2F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

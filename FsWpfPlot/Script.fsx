@@ -13,6 +13,7 @@ open FsWpfPlot.Models
 open System
 
 let model = SurfacePlotModel(MinX = 6., MinY = 8.)
+model.Data <- model.FuncZ |> model.DataFromFunction
 let plot = FsWpfPlot.Views.SurfacePlotContainerProxy(model)
 plot.Show()
 

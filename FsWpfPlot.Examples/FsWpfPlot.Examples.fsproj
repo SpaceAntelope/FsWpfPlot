@@ -5,15 +5,15 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>89192a71-e89b-4976-9db4-aeb5c181cb63</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>FsWpfPlot</RootNamespace>
-    <AssemblyName>FsWpfPlot</AssemblyName>
-    <UseStandardResourceNames>true</UseStandardResourceNames>
+    <ProjectGuid>0daec2a6-1985-42a3-ae71-b861855ff2f7</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>FsWpfPlot.Examples</RootNamespace>
+    <AssemblyName>FsWpfPlot.Examples</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.4.3.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Name>FsWpfPlot</Name>
+    <UseStandardResourceNames>true</UseStandardResourceNames>
+    <TargetFSharpCoreVersion>4.4.3.0</TargetFSharpCoreVersion>
+    <Name>FsWpfPlot.Examples</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +23,9 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +34,9 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -51,17 +55,9 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="Classes\Types.fs" />
-    <Compile Include="Classes\XamlProxyBase.fs" />
-    <Compile Include="Classes\HelperFunctions.fs" />
-    <Compile Include="Models\SurfacePlotGraphicElementsModel.fs" />
-    <Compile Include="Models\SurfacePlotModel.fs" />
-    <Compile Include="VIsualElements\SurfacePlotAxes3D.fs" />
-    <Resource Include="Views\SurfacePlotContainer.xaml" />
-    <Compile Include="Views\SurfacePlotContainerProxy.fs" />
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="FlexiPlot.fs" />
-    <None Include="Script.fsx" />
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +82,14 @@
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FsWpfPlot\FsWpfPlot.fsproj">
+      <Name>FsWpfPlot</Name>
+      <Project>{89192a71-e89b-4976-9db4-aeb5c181cb63}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
