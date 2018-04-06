@@ -5,6 +5,8 @@ module HelperFunctions =
     open HelixToolkit.Wpf
     open System.Windows
     open System
+    open Microsoft.Win32
+    open System.Windows.Controls
 
     let findGradientY (data : Point3D[,]) =
         let rows,cols = data.GetUpperBound(0) + 1, data.GetUpperBound(0) + 1
@@ -51,7 +53,12 @@ module HelperFunctions =
                     let point = map row col
                     Point3D(point.X, point.Y, f point.X point.Y))
 
-
+    let SaveViewPortToFile (viewPort : Viewport3D) =
+            let dlg = SaveFileDialog(Filter = Exporters.Filter, DefaultExt = Exporters.DefaultExtension) 
+            
+            if dlg.ShowDialog().Value then
+                Viewport3DHelper.Export(viewPort, dlg.FileName);
+            
     let inline CGList<'T> (source: 'T seq) = System.Collections.Generic.List<'T>(source)
     let inline toDep source = source :> DependencyObject
     let inline roundTo1d z = Math.Round (z * 10.)/10.

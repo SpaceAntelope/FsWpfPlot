@@ -12,7 +12,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Export" IsEnabled="False"/>
+                <MenuItem x:Name="miExport"  Header="Export" />
                 <Separator/>
                 <MenuItem x:Name="miExit" Header="Exit" />
             </MenuItem>
