@@ -8,7 +8,7 @@
     open FsWpfPlot.HelperFunctions
     
     type SurfacePlotModel() = 
-        let mutable funcZ = Some(fun x y -> (sin x*y) * 0.5) 
+        let mutable funcZ : PlotFunction option = Some(fun x y -> (sin x*y) * 0.5) 
         let mutable data : Point3D[,] = null
         let propertyChangedHandler = new Event<PropertyChangedEventHandler,PropertyChangedEventArgs>()
         interface INotifyPropertyChanged with

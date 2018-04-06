@@ -2,6 +2,7 @@
     open System.Windows.Media.Media3D
     open System.Windows.Data
     
+    type PlotFunction = float->float->float
 
     type ColorCoding = ByLights | ByGradientY
 
