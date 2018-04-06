@@ -5,9 +5,9 @@
         xmlns:local="clr-namespace:FsWpfPlot"
         xmlns:types="clr-namespace:FsWpfPlot.Types;assembly=FsWpfPlot" 
         xmlns:vel="clr-namespace:FsWpfPlot.VisualElements;assembly=FsWpfPlot" 
-        Title="Surface plot demo" Height="480" Width="640">
+        Title="{Binding PlolTitle}" Height="480" Width="640">
     <Window.Resources>
-        <types:LightConverter x:Key="dummyConverter"/>
+        <!--<types:LightConverter x:Key="dummyConverter"/>-->
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -16,19 +16,26 @@
                 <Separator/>
                 <MenuItem x:Name="miExit" Header="Exit" />
             </MenuItem>
+            <MenuItem Header="Camera">
+                <MenuItem Header="Orthographic" IsCheckable="True" IsChecked="{Binding Orthographic, ElementName=viewPort}"/>
+            </MenuItem>
+            <MenuItem Header="Lighting">
+                <MenuItem x:Name="miGradientY" Header="By gradient Y" IsCheckable="True" />
+                <MenuItem x:Name="miLighting" Header="By lighting" IsCheckable="True" />
+            </MenuItem>
         </Menu>
-        <h:HelixViewport3D ZoomExtentsWhenLoaded="True" ShowCoordinateSystem="True">
-            <h:HelixViewport3D.Camera>
+        <h:HelixViewport3D x:Name="viewPort" ZoomExtentsWhenLoaded="True" ShowCoordinateSystem="True">
+            <h:HelixViewport3D.DefaultCamera>
                 <!-- HelixViewport3D.ZoomExtentsWhenLoaded will figure out the position of the Camera -->
                 <PerspectiveCamera LookDirection="5,10,-10" UpDirection="0,0,1"/>
-            </h:HelixViewport3D.Camera>
+                <!--<OrthographicCamera LookDirection="5,10,-10" UpDirection="0,0,1"/>-->
+            </h:HelixViewport3D.DefaultCamera>
 
             <!-- Lights -->
-            <ModelVisual3D Content="{Binding Lights,Converter={StaticResource ResourceKey=dummyConverter}, ConverterParameter='Lights!'}"/>
+            <!--<ModelVisual3D Content="{Binding Lights, ElementName=plot}"/>-->
 
             <!-- The plot visual (surface, axes and labels) -->
-            <vel:SurfacePlotAxes3D Points="{Binding Data}" />
-                                   <!--ColorValues="{Binding ColorValues}" SurfaceBrush="{Binding Graphics.SurfaceBrush}"-->
+            <vel:SurfacePlot3D x:Name="plot3D" Points="{Binding Data}" ColorCoding="{Binding ColorCoding}" />
 
         </h:HelixViewport3D>
     </DockPanel>

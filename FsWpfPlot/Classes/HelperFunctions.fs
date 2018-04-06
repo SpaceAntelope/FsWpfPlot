@@ -3,8 +3,8 @@
 module HelperFunctions =
     open System.Windows.Media.Media3D
     open HelixToolkit.Wpf
-    open System.Runtime.InteropServices
     open System.Windows
+    open System
 
     let findGradientY (data : Point3D[,]) =
         let rows,cols = data.GetUpperBound(0) + 1, data.GetUpperBound(0) + 1
@@ -45,5 +45,13 @@ module HelperFunctions =
         
         (v0*(1.0 - v) + v1*v).ToPoint3D()
     
-    let inline toList<'T> (source: 'T seq) = System.Collections.Generic.List<'T>(source)
+
+    let calculateDataAndMapToResolution (map : int->int->Point)  (f:float->float->float) resolution =
+            Array2D.init resolution resolution (fun row col ->
+                    let point = map row col
+                    Point3D(point.X, point.Y, f point.X point.Y))
+
+
+    let inline CGList<'T> (source: 'T seq) = System.Collections.Generic.List<'T>(source)
     let inline toDep source = source :> DependencyObject
+    let inline roundTo1d z = Math.Round (z * 10.)/10.

@@ -8,7 +8,8 @@
     open FsWpfPlot.HelperFunctions
     
     type SurfacePlotModel() = 
-        
+        let mutable funcZ = Some(fun x y -> (sin x*y) * 0.5) 
+        let mutable data : Point3D[,] = null
         let propertyChangedHandler = new Event<PropertyChangedEventHandler,PropertyChangedEventArgs>()
         interface INotifyPropertyChanged with
             [<CLIEvent>]
@@ -21,9 +22,19 @@
         member val MinX = 0. with get,set
         member val MaxY = 5. with get,set
         member val MinY = 0. with get,set
-        member val MaxZ = 1. with get,set
-        member val MinZ = 0. with get,set
-        member val FuncZ = fun x y -> (sin x*y) * 0.5  with get,set
+        //member val MaxZ = 1. with get,set
+        //member val MinZ = 0. with get,set
+        member this.FuncZ 
+            with get() = funcZ
+             and set(value) = 
+                    funcZ <- value
+                    this.raisePropertyChanged "FuncZ"
+                    this.raisePropertyChanged "Data"
+        
+        member this.setRangeX min max = this.MinX <- min ; this.MaxX <- max
+        member this.getRangeX = this.MaxX - this.MinX
+        member this.setRangeY min max = this.MinY <- min ; this.MaxY <- max
+        member this.getRangeY = this.MaxY - this.MinY
 
         member this.MapToResolution row col =            
             let x' = this.MinX + (float col) / (float this.Resolution - 1.) * (this.MaxX - this.MinX)
@@ -31,21 +42,15 @@
 
             Point(x',y')
 
-        member this.DataFromFunction (f: (float->float->float)) =
-            Array2D.init this.Resolution this.Resolution (fun row col ->
-                    let point = this.MapToResolution row col
-                    Point3D(point.X, point.Y, f point.X point.Y))
-            
-        member val Graphics = new SurfacePlotGraphicElementsModel() with get, set
+        member this.Data 
+            with get() = 
+                match this.FuncZ with
+                | Some(func) -> calculateDataAndMapToResolution (this.MapToResolution) func (this.Resolution)
+                | None -> data
+            and set(value) =
+                data <- value
+                this.raisePropertyChanged "Data"
+        
+        member val ColorCoding = ByGradientY with get, set
 
-        member val Data = null with get, set
-
-        member this.Lights with get() = this.Graphics.Lights
-
-        member this.ColorValues 
-            with get() =
-                match this.Graphics.ColorCoding with 
-                | ByGradientY ->
-                    findGradientY <| this.Data
-                | ByLights -> 
-                    null
+        member val PlotTitle = "3D Plot" with get, set

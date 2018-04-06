@@ -6,6 +6,7 @@
     open HelixToolkit.Wpf
     open FsWpfPlot.Types
     open FsWpfPlot
+    open FsWpfPlot
 
     type SurfacePlotGraphicElementsModel() = 
         let propertyChangedHandler = new Event<PropertyChangedEventHandler,PropertyChangedEventArgs>()
@@ -40,7 +41,14 @@
                     Brushes.White 
                     :> Brush
 
-        
+        //member this.ColorValues
+        //    with get() =
+        //        match this.ColorCoding with 
+        //            BrushHelper.CreateGradientBrush(Colors.Red, Colors.White, Colors.Blue)
+        //            :> Brush
+        //        | ByLights -> 
+        //            Brushes.White 
+        //            :> Brush
 
         
     
