@@ -79,6 +79,9 @@
                 | x -> failwith (sprintf "%A is not a valid value for color coding" x)
 
         member this.UpdateModel() =          
+            this.Children.Clear()
+            this.Children.Add visualChild
+
             let group = Model3DGroup()
             let summary = this.Points |> DataSetInfo.CreateFrom 
             
