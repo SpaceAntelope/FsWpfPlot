@@ -8,7 +8,10 @@ module Classes =
     open System.Windows.Markup    
     open System.ComponentModel
 
-    let (?) (this : Control) (prop : string) : 'T = this.FindName(prop) :?> 'T
+    let (?) (this : Control) (prop : string) : 'T = 
+        let ctrl = this.FindName(prop) :?> 'T 
+        if isNull ctrl then raise (System.Exception(sprintf "Could not find property with name %s" prop))
+        else ctrl            
 
     type XamlProxyBase(resourcePath : string, model : INotifyPropertyChanged) = 
         let resUri = System.Uri(resourcePath, System.UriKind.Relative)

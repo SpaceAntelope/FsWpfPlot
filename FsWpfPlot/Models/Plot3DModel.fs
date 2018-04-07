@@ -7,9 +7,13 @@
     open FsWpfPlot.Types
     open FsWpfPlot.HelperFunctions
     
-    type SurfacePlotModel() = 
+    type Plot3DModel() = 
+        // automatic get/setters won't cut it for dependency property binding
         let mutable funcZ : PlotFunction option = Some(fun x y -> (sin x*y) * 0.5) 
         let mutable data : Point3D[,] = null
+        let mutable plotKind : PlotKind = PlotKind.Surface
+        let mutable colorCoding : ColorCoding = ColorCoding.ByGradientY
+
         let propertyChangedHandler = new Event<PropertyChangedEventHandler,PropertyChangedEventArgs>()
         interface INotifyPropertyChanged with
             [<CLIEvent>]
@@ -39,7 +43,6 @@
         member this.MapToResolution row col =            
             let x' = this.MinX + (float col) / (float this.Resolution - 1.) * (this.MaxX - this.MinX)
             let y' = this.MinY + (float row) / (float this.Resolution - 1.) * (this.MaxY - this.MinY)
-
             Point(x',y')
 
         member this.Data 
@@ -51,6 +54,16 @@
                 data <- value
                 this.raisePropertyChanged "Data"
         
-        member val ColorCoding = ByGradientY with get, set
+        member this.ColorCoding
+            with get() = colorCoding
+            and set(value) = 
+                colorCoding <- value
+                this.raisePropertyChanged "PlotKind"
+
+        member this.PlotKind 
+            with get() = plotKind
+            and  set(value: PlotKind) = 
+                    plotKind <- value
+                    this.raisePropertyChanged "PlotKind"
 
         member val PlotTitle = "3D Plot" with get, set

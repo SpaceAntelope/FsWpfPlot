@@ -9,7 +9,7 @@
     open System
     open System.Windows.Controls
 
-    type SurfacePlot3D() as this = 
+    type Plot3D() as this = 
         inherit ModelVisual3D()
         
         let visualChild = ModelVisual3D()
@@ -18,13 +18,18 @@
         
         static let PointsProperty : DependencyProperty = 
             DependencyProperty.Register(
-                "Points", typeof<Point3D[,]>, typeof<SurfacePlot3D>,
-                new UIPropertyMetadata(Array2D.zeroCreate<Point3D> 4 4, PropertyChangedCallback SurfacePlot3D.modelChanged) )
+                "Points", typeof<Point3D[,]>, typeof<Plot3D>,
+                new UIPropertyMetadata(Array2D.zeroCreate<Point3D> 4 4, PropertyChangedCallback Plot3D.modelChanged) )
 
         static let ColorCodingProperty : DependencyProperty = 
             DependencyProperty.Register(
-                "ColorCoding", typeof<ColorCoding>, typeof<SurfacePlot3D>,
-                new UIPropertyMetadata(ByGradientY, PropertyChangedCallback SurfacePlot3D.modelChanged) )
+                "ColorCoding", typeof<ColorCoding>, typeof<Plot3D>,
+                new UIPropertyMetadata(ColorCoding.ByGradientY, PropertyChangedCallback Plot3D.modelChanged) )
+
+        static let PlotKindProperty : DependencyProperty = 
+            DependencyProperty.Register(
+                "PlotKind", typeof<PlotKind>, typeof<Plot3D>,
+                new UIPropertyMetadata(PlotKind.Surface, PropertyChangedCallback Plot3D.modelChanged) )
         
         member this.Points 
             with get() = this.GetValue(PointsProperty) :?> Point3D[,]
@@ -34,68 +39,109 @@
             with get() = this.GetValue(ColorCodingProperty) :?> ColorCoding
             and  set(value: ColorCoding) = this.SetValue(ColorCodingProperty, value)
 
+        member this.PlotKind 
+            with get() = this.GetValue(PlotKindProperty) :?> PlotKind
+            and  set(value: PlotKind) = this.SetValue(PlotKindProperty, value)
+
         static member modelChanged sender e =             
-            (sender :?> SurfacePlot3D).UpdateModel()
+            (sender :?> Plot3D).UpdateModel()
 
         member val IntervalX = 1. with get, set
         member val IntervalY = 1. with get, set
         member val IntervalZ = 0.5 with get, set
         member val FontSize = 0.2 with get, set
         member val LineThickness = 0.01 with get, set
+        member val PointSize = 1. with get, set
+        member val PointColor = Colors.Red with get, set
 
         member this.CreateLights colorCoding =
             let group = Model3DGroup()
             match colorCoding with 
-            | ByGradientY ->
+            | ColorCoding.ByGradientY ->
                 group.Children.Add(AmbientLight(Colors.White))
-            | ByLights -> 
+            | ColorCoding.ByLights -> 
                 group.Children.Add(AmbientLight(Colors.Gray))
                 group.Children.Add(PointLight(Colors.Red, Point3D(0.,-1000.,0.)))
                 group.Children.Add(PointLight(Colors.Blue, Point3D(0.,0.,1000.)))
                 group.Children.Add(PointLight(Colors.Green, Point3D(1000.,1000.,0.)))
+            | x -> failwith (sprintf "%A is not a valid value for color coding" x)
             group
         
         member this.SurfaceBrush 
             with get() =
                 match this.ColorCoding with 
-                | ByGradientY ->
+                | ColorCoding.ByGradientY ->
                     BrushHelper.CreateGradientBrush(Colors.Red, Colors.White, Colors.Blue)
                     :> Brush
-                | ByLights -> 
+                | ColorCoding.ByLights -> 
                     Brushes.White 
                     :> Brush
+                | x -> failwith (sprintf "%A is not a valid value for color coding" x)
 
         member this.UpdateModel() =          
             let group = Model3DGroup()
             let summary = this.Points |> DataSetInfo.CreateFrom 
             
-            summary
-            |> this.CreateAxes
-            |> fun (textModel, axisGeometry) ->
-                group.Children.Add axisGeometry
-                textModel |> Seq.iter (this.Children.Add) 
+            let axes() = 
+                summary
+                |> this.CreateAxes
+                |> fun (textModel, axisGeometry) ->
+                    group.Children.Add axisGeometry
+                    textModel |> Seq.iter (this.Children.Add) 
             
-            summary
-            |> this.CreateSeries3D
-            |> group.Children.Add
+            let wireframe() = 
+                summary
+                |> this.CreateWireFrame
+                |> group.Children.Add
+            
+            let surface() = 
+                summary
+                |> this.CreateSurface (this.ColorCoding) (this.SurfaceBrush)
+                |> group.Children.Add
 
-            summary
-            |> this.CreateSurface (this.ColorCoding) (this.SurfaceBrush)
-            |> group.Children.Add
+            let lighting() = 
+                this.ColorCoding
+                |> this.CreateLights
+                |> group.Children.Add
+            
+            let points() = 
+                summary
+                |> this.CreateScatterPlot this.PointColor
+                |> this.Children.Add
+            
+            let linear() = 
+                summary
+                |> this.CreateLinear this.PointColor
+                |> this.Children.Add
 
-            this.ColorCoding
-            |> this.CreateLights
-            |> group.Children.Add
-
-            visualChild.Content <- group
-           
+            match this.PlotKind with
+            | PlotKind.Points -> 
+                    axes()
+                    lighting()
+                    points()
+            | PlotKind.Surface ->
+                    axes()
+                    lighting()
+                    wireframe()
+                    surface()
+            | PlotKind.Wireframe ->
+                    axes()
+                    lighting()
+                    wireframe()
+            | PlotKind.Linear ->
+                    axes()
+                    lighting()
+                    linear()
+            | x -> failwith (sprintf "%A not a valid plot kind enum" x)
+            
+            visualChild.Content <- group           
 
         member this.CreateAxes (summary : DataSetInfo) =
             let { MinX=minX; MinY=minY; MinZ=minZ;
                   MaxX=maxX; MaxY=maxY; MaxZ=maxZ; } = summary
             
             let billBoard text point = 
-                BillboardTextVisual3D(Text = text,         
+                BillboardTextVisual3D(Text = text, FontWeight = FontWeight.FromOpenTypeWeight(1),
                     FontSize=15., FontFamily=new FontFamily("Arial"),
                     Background=Brushes.Transparent,
                     Position=point,
@@ -141,7 +187,7 @@
             
             xLabels@yLabels@zLabels, GeometryModel3D(axesMeshBuilder.ToMesh(), Materials.Black) 
 
-        member this.CreateSeries3D (summary : DataSetInfo) =             
+        member this.CreateWireFrame (summary : DataSetInfo) =             
             let { MinX=minX; MinY=minY; MinZ=minZ;
                   MaxX=maxX; MaxY=maxY;
                   Columns=cols; Rows=rows; 
@@ -167,7 +213,17 @@
             
             GeometryModel3D(meshBuilder.ToMesh(), Materials.Black)
 
-        
+        member this.CreateScatterPlot (color: Color) (summary : DataSetInfo) =
+            PointsVisual3D(
+                Color = color, Size=this.PointSize, 
+                Points = Point3DCollection(summary.Data |> Seq.cast<Point3D>))
+            
+        member this.CreateLinear (color: Color) (summary : DataSetInfo) =
+            LinesVisual3D(
+                Color = color, 
+                Points = Point3DCollection(summary.Data |> Seq.cast<Point3D>))
+
+
         member this.CreateSurface (colorCoding: ColorCoding) (brush : Brush) (summary: DataSetInfo) =
             let { MinZ=minZ; 
                   Columns=cols; Rows=rows; 
@@ -175,8 +231,9 @@
             
             let colorValues = 
                 match colorCoding with
-                | ByGradientY -> findGradientY summary.Data
-                | ByLights -> Array2D.zeroCreate 1 1
+                | ColorCoding.ByGradientY -> findGradientY summary.Data
+                | ColorCoding.ByLights -> Array2D.zeroCreate 1 1
+                | x -> failwith (sprintf "%A is not a valid value for color coding" x)
             
             let (minColorValue, maxColorValue) = 
                 let values = [|Double.MaxValue;Double.MinValue|]

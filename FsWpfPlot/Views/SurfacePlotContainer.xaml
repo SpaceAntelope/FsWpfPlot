@@ -16,12 +16,33 @@
                 <Separator/>
                 <MenuItem x:Name="miExit" Header="Exit" />
             </MenuItem>
-            <MenuItem Header="Camera">
+            <MenuItem Header="Display">
                 <MenuItem Header="Orthographic" IsCheckable="True" IsChecked="{Binding Orthographic, ElementName=viewPort}"/>
+                <Separator/>
+                <MenuItem x:Name="miGradientY" Header="By Gradient Y" IsCheckable="True" />
+                <MenuItem x:Name="miLighting" Header="By Lighting" IsCheckable="True" />
             </MenuItem>
-            <MenuItem Header="Lighting">
-                <MenuItem x:Name="miGradientY" Header="By gradient Y" IsCheckable="True" />
-                <MenuItem x:Name="miLighting" Header="By lighting" IsCheckable="True" />
+            <MenuItem Header="Plot">
+                <MenuItem x:Name="miSurface" Header="Surface" >
+                    <MenuItem.Icon>
+                        <RadioButton IsChecked="True" GroupName="PlotKind" x:Name="rbSurface"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem  Header="Wireframe" >
+                    <MenuItem.Icon>
+                        <RadioButton GroupName="PlotKind" x:Name="rbWireframe"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="miPoints" Header="Scatter" >
+                    <MenuItem.Icon>
+                        <RadioButton GroupName="PlotKind" x:Name="rbScatter" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="miLinePlot" Header="Linear"  >
+                    <MenuItem.Icon>
+                        <RadioButton GroupName="PlotKind" x:Name="rbLinear"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <h:HelixViewport3D x:Name="viewPort" ZoomExtentsWhenLoaded="True" ShowCoordinateSystem="True">
@@ -35,7 +56,7 @@
             <!--<ModelVisual3D Content="{Binding Lights, ElementName=plot}"/>-->
 
             <!-- The plot visual (surface, axes and labels) -->
-            <vel:SurfacePlot3D x:Name="plot3D" Points="{Binding Data}" ColorCoding="{Binding ColorCoding}" />
+            <vel:Plot3D x:Name="plot3D" Points="{Binding Data}" ColorCoding="{Binding ColorCoding}" PlotKind="{Binding PlotKind}" />
 
         </h:HelixViewport3D>
     </DockPanel>

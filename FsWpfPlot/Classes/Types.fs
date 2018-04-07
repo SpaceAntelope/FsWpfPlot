@@ -4,7 +4,9 @@
     
     type PlotFunction = float->float->float
 
-    type ColorCoding = ByLights | ByGradientY
+    type ColorCoding = ByLights=0 | ByGradientY=1
+
+    type PlotKind = Surface=0 | Points=1 | Linear=2 | Wireframe=3
 
     type DataSetInfo = {
         MaxX:float
@@ -54,3 +56,15 @@
 
             member this.ConvertBack(value: obj, targetType: System.Type, parameter: obj, culture: System.Globalization.CultureInfo): obj = 
                 raise (System.NotImplementedException())
+
+    //type EnumToBooleanConverter() =
+    //    interface IValueConverter with
+    //        member this.Convert(value: obj, targetType: System.Type, parameter: obj, culture: System.Globalization.CultureInfo): obj = 
+    //            if not isNull value && not isNull parameter 
+    //            then 
+    //                let isChecked = value :?> bool
+    //                let targetValue = parameter
+                    
+
+    //        member this.ConvertBack(value: obj, targetType: System.Type, parameter: obj, culture: System.Globalization.CultureInfo): obj = 
+    //            raise (System.NotImplementedException()) 

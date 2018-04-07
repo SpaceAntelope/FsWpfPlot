@@ -7,6 +7,7 @@ module HelperFunctions =
     open System
     open Microsoft.Win32
     open System.Windows.Controls
+    open Microsoft.FSharp.Reflection
 
     let findGradientY (data : Point3D[,]) =
         let rows,cols = data.GetUpperBound(0) + 1, data.GetUpperBound(0) + 1
@@ -62,3 +63,10 @@ module HelperFunctions =
     let inline CGList<'T> (source: 'T seq) = System.Collections.Generic.List<'T>(source)
     let inline toDep source = source :> DependencyObject
     let inline roundTo1d z = Math.Round (z * 10.)/10.
+
+    let GetUnionCaseName (x:'a) = 
+        match FSharpValue.GetUnionFields(x, typeof<'a>) with
+        | case, _ -> case.Name  
+
+    let GetUnionCaseNames <'ty> () = 
+        FSharpType.GetUnionCases(typeof<'ty>) |> Array.map (fun info -> info.Name)

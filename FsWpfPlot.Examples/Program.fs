@@ -7,8 +7,7 @@ open System
 let main argv = 
 
     let inline sq x = pown x 2
-
-    let signf x = (sign x) |> float
+    let inline signf x = (sign x) |> float
 
     let radial : PlotFunction = fun x y -> sqrt ((pown x 2) + (pown y 2))
     let windmill : PlotFunction = fun x y -> signf(x*y)*signf(1. - sq(x*9.) + sq(y*9.))/9.
@@ -16,7 +15,7 @@ let main argv =
     let ripple : PlotFunction = fun x y -> sin ( 10.*(sq x + (sq y) )/10.) 
     let ripple' : PlotFunction = fun x y -> sin ( 10.*(sq x + (sq y) )/10.) + tanh(x*y) - sqrt ((pown x 2) + (pown y 2))
 
-    let model = SurfacePlotModel(Resolution = 200)
+    let model = Plot3DModel(Resolution = 200)
     model.setRangeX -6. 6.
     model.setRangeY -6. 6.
     model.FuncZ <- Some(ripple')

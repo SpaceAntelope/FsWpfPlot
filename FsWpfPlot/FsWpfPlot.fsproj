@@ -54,8 +54,8 @@
     <Compile Include="Classes\Types.fs" />
     <Compile Include="Classes\XamlProxyBase.fs" />
     <Compile Include="Classes\HelperFunctions.fs" />
-    <Compile Include="Models\SurfacePlotModel.fs" />
-    <Compile Include="VIsualElements\SurfacePlot3D.fs" />
+    <Compile Include="Models\Plot3DModel.fs" />
+    <Compile Include="VIsualElements\Plot3D.fs" />
     <Resource Include="Views\SurfacePlotContainer.xaml" />
     <Compile Include="Views\SurfacePlotContainerProxy.fs" />
     <Compile Include="AssemblyInfo.fs" />
