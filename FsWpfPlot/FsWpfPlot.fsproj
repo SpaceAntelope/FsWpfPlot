@@ -52,12 +52,16 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="Classes\Types.fs" />
-    <Compile Include="Classes\XamlProxyBase.fs" />
     <Compile Include="Classes\HelperFunctions.fs" />
+    <Compile Include="Classes\XamlProxyBase.fs" />
     <Compile Include="Models\Plot3DModel.fs" />
+    <Compile Include="Models\Plot2DModel.fs" />
     <Compile Include="VIsualElements\Plot3D.fs" />
+    <Compile Include="VIsualElements\Plot2D.fs" />
     <Resource Include="Views\SurfacePlotContainer.xaml" />
     <Compile Include="Views\SurfacePlotContainerProxy.fs" />
+    <Resource Include="Views\Plot2DContainer.xaml" />
+    <Compile Include="Views\Plot2DContainerProxy.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="FlexiPlot.fs" />
     <None Include="Script.fsx" />

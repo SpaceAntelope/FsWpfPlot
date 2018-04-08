@@ -83,7 +83,7 @@
             this.Children.Add visualChild
 
             let group = Model3DGroup()
-            let summary = this.Points |> DataSetInfo.CreateFrom 
+            let summary = this.Points |> DataSummary3D.CreateFrom 
             
             let axes() = 
                 summary
@@ -139,7 +139,7 @@
             
             visualChild.Content <- group           
 
-        member this.CreateAxes (summary : DataSetInfo) =
+        member this.CreateAxes (summary : DataSummary3D) =
             let { MinX=minX; MinY=minY; MinZ=minZ;
                   MaxX=maxX; MaxY=maxY; MaxZ=maxZ; } = summary
             
@@ -171,8 +171,8 @@
                 ]
 
             let zLabels =                
-                let maxZ = roundTo1d maxZ
-                [   yield! [ for z in minZ .. this.IntervalZ .. maxZ do      
+                let maxZ' = roundTo1d maxZ
+                [   yield! [ for z in minZ .. this.IntervalZ .. maxZ' do      
                                 yield Point3D(maxX + this.FontSize * 3., maxY + this.FontSize * 3., z)
                                 |> billBoard (z |> roundTo1d |> string) ]
 
@@ -190,7 +190,7 @@
             
             xLabels@yLabels@zLabels, GeometryModel3D(axesMeshBuilder.ToMesh(), Materials.Black) 
 
-        member this.CreateWireFrame (summary : DataSetInfo) =             
+        member this.CreateWireFrame (summary : DataSummary3D) =             
             let { MinX=minX; MinY=minY; MinZ=minZ;
                   MaxX=maxX; MaxY=maxY;
                   Columns=cols; Rows=rows; 
@@ -216,18 +216,18 @@
             
             GeometryModel3D(meshBuilder.ToMesh(), Materials.Black)
 
-        member this.CreateScatterPlot (color: Color) (summary : DataSetInfo) =
+        member this.CreateScatterPlot (color: Color) (summary : DataSummary3D) =
             PointsVisual3D(
                 Color = color, Size=this.PointSize, 
                 Points = Point3DCollection(summary.Data |> Seq.cast<Point3D>))
             
-        member this.CreateLinear (color: Color) (summary : DataSetInfo) =
+        member this.CreateLinear (color: Color) (summary : DataSummary3D) =
             LinesVisual3D(
                 Color = color, 
                 Points = Point3DCollection(summary.Data |> Seq.cast<Point3D>))
 
 
-        member this.CreateSurface (colorCoding: ColorCoding) (brush : Brush) (summary: DataSetInfo) =
+        member this.CreateSurface (colorCoding: ColorCoding) (brush : Brush) (summary: DataSummary3D) =
             let { MinZ=minZ; 
                   Columns=cols; Rows=rows; 
                   Data=points} = summary

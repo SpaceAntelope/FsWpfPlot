@@ -22,7 +22,7 @@
                 <MenuItem x:Name="miGradientY" Header="By Gradient Y" IsCheckable="True" />
                 <MenuItem x:Name="miLighting" Header="By Lighting" IsCheckable="True" />
             </MenuItem>
-            <MenuItem Header="Plot">
+            <!--<MenuItem Header="Plot">
                 <MenuItem x:Name="miSurface" Header="Surface" >
                     <MenuItem.Icon>
                         <RadioButton IsChecked="True" GroupName="PlotKind" x:Name="rbSurface"/>
@@ -43,21 +43,26 @@
                         <RadioButton GroupName="PlotKind" x:Name="rbLinear"/>
                     </MenuItem.Icon>
                 </MenuItem>
-            </MenuItem>
+            </MenuItem>-->
         </Menu>
-        <h:HelixViewport3D x:Name="viewPort" ZoomExtentsWhenLoaded="True" ShowCoordinateSystem="True">
+        <!--<Grid HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="75"></RowDefinition>
+            </Grid.RowDefinitions>
+        </Grid>-->
+        <!--<StackPanel DockPanel.Dock="Top" Height="50">
+            <TextBlock Text="{Binding MajorDistance, ElementName=gridLines}"></TextBlock>
+            <TextBlock Text="{Binding MinorDistance, ElementName=gridLines}"></TextBlock>
+        </StackPanel>-->        
+        <h:HelixViewport3D DockPanel.Dock="Top" VerticalAlignment="Stretch" x:Name="viewPort" BorderThickness="3" BorderBrush="BlueViolet"
+                               ZoomExtentsWhenLoaded="True" ShowCoordinateSystem="True" ShowCameraInfo="True">
             <h:HelixViewport3D.DefaultCamera>
-                <!-- HelixViewport3D.ZoomExtentsWhenLoaded will figure out the position of the Camera -->
-                <PerspectiveCamera LookDirection="5,10,-10" UpDirection="0,0,1"/>
-                <!--<OrthographicCamera LookDirection="5,10,-10" UpDirection="0,0,1"/>-->
+                <PerspectiveCamera x:Name="perspectiveCamera" NearPlaneDistance="0"
+                        Position="0,0,10" LookDirection="0,0,-10" UpDirection="0,1,0"/>
             </h:HelixViewport3D.DefaultCamera>
-
-            <!-- Lights -->
-            <!--<ModelVisual3D Content="{Binding Lights, ElementName=plot}"/>-->
-
-            <!-- The plot visual (surface, axes and labels) -->
-            <vel:Plot3D x:Name="plot3D" Points="{Binding Data}" ColorCoding="{Binding ColorCoding}" PlotKind="{Binding PlotKind}" />
-
+            <vel:Plot2D x:Name="plot2D" Points="{Binding Data}" PlotKind="{Binding PlotKind}" />
+            <!--<h:GridLinesVisual3D x:Name="gridLines" Fill="Blue" Center="0,0,0" Visible="True" MajorDistance="1" MinorDistance="0.5" Length="1" Width="5" />-->
         </h:HelixViewport3D>
     </DockPanel>
 </Window>
@@ -75,3 +80,4 @@
         <TextBlock Text="{Binding MaxX}"></TextBlock>
     </StackPanel>
 </Window>-->
+    

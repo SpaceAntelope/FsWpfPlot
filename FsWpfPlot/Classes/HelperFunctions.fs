@@ -3,6 +3,7 @@
 module HelperFunctions =
     open System.Windows.Media.Media3D
     open HelixToolkit.Wpf
+    open FsWpfPlot.Types
     open System.Windows
     open System
     open Microsoft.Win32
@@ -49,11 +50,11 @@ module HelperFunctions =
         (v0*(1.0 - v) + v1*v).ToPoint3D()
     
 
-    let calculateDataAndMapToResolution (map : int->int->Point)  (f:float->float->float) resolution =
+    let calculateDataAndMapToResolution (map : int->int->Point)  (f:PlotFunction) resolution =
             Array2D.init resolution resolution (fun row col ->
                     let point = map row col
                     Point3D(point.X, point.Y, f point.X point.Y))
-
+    
     let SaveViewPortToFile (viewPort : Viewport3D) =
             let dlg = SaveFileDialog(Filter = Exporters.Filter, DefaultExt = Exporters.DefaultExtension) 
             
@@ -63,6 +64,7 @@ module HelperFunctions =
     let inline CGList<'T> (source: 'T seq) = System.Collections.Generic.List<'T>(source)
     let inline toDep source = source :> DependencyObject
     let inline roundTo1d z = Math.Round (z * 10.)/10.
+    let inline pointToPoint3D (point:Point) = Point3D(point.X, point.Y, 0.)
 
     let GetUnionCaseName (x:'a) = 
         match FSharpValue.GetUnionFields(x, typeof<'a>) with
@@ -70,3 +72,8 @@ module HelperFunctions =
 
     let GetUnionCaseNames <'ty> () = 
         FSharpType.GetUnionCases(typeof<'ty>) |> Array.map (fun info -> info.Name)
+
+    let (?) (this : Control) (prop : string) : 'T = 
+        let ctrl = this.FindName(prop) :?> 'T 
+        if isNull ctrl then raise (System.Exception(sprintf "Could not find property with name %s" prop))
+        else ctrl   
